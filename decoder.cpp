@@ -1,3 +1,7 @@
+//
+// Created by tiber on 07.05.2021.
+//
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -8,20 +12,20 @@ using namespace std;
 map<char, vector<bool> > table;
 vector<bool> bincode;
 class Uzel{
-    public:
-        int num;
-        char ch;
-        Uzel *left, *right;
-        Uzel(){
-            left=nullptr;
-            right= nullptr;
-            num=0;
-            ch='\0';
-        }
-        ~Uzel(){
-            delete[]left;
-            delete[]right;
-        }
+public:
+    int num;
+    char ch;
+    Uzel *left, *right;
+    Uzel(){
+        left=nullptr;
+        right= nullptr;
+        num=0;
+        ch='\0';
+    }
+    ~Uzel(){
+        delete[]left;
+        delete[]right;
+    }
 };
 
 
@@ -50,45 +54,32 @@ void searchword(Uzel* tree)
 
 }
 
-int main()
-{
-    map < char, int > m;
-    char cc;
-    string s;
-    ifstream fail;
-    fail.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
-    if (!(fail.is_open())) // если файл не открыт
-        cout << "file can't open\n"; // сообщить об этом
-    else{
-        while((cc = fail.get()) != EOF) {   //объяснение ниже
-            m[cc]++;
-        }
+int main(){
+
+    ifstream res("C:\\Users\\tiber\\CLionProjects\\untitled\\result.bin");
+    map<char, int > m;
+    int n;
+    int last_bit;
+    int nym;
+    res>>n;//размерность таблицы
+    res>>last_bit;//значащие биты последнего батча
+    cout<<n<<endl;
+    cout<<last_bit<<endl;
+    //res.seekg(((int)log10(n)+1));
+    char w;
+    int k = n;
+    while(n > 0){//заполняем таблицу
+        w = res.get();
+        res>>nym;
+        m[w]=nym;
+        n--;
+
     }
-    fail.close();
-
-
-    //string s="it's my prograndma";
-//    map < char, int > m;
-//    map < char, int> :: iterator ii;
-//    for (int i = 0; i < s.length(); ++i) {
-//        for (int j = i; j >=0 ; --j) {
-//            if (s[i]==s[j])
-//            {
-//                continue;
-//            }
-//        }
-//        char c=s[i];
-//        m[c]=0;
-//        for (int j = 0; j < s.length(); ++j) {
-//            if (s[i]==s[j]){
-//                m[c]++;
-//            }
-//        }
-//    }
-
-
+ //   res.close();
     map < char, int> :: iterator ii;
-
+    for(ii=m.begin();ii!=m.end();ii++){
+        cout<<ii->first<<":"<<ii->second<<endl;
+    }
 
     list< Uzel* > L;
 
@@ -116,85 +107,59 @@ int main()
         L.push_front(tree);
     }
     Uzel* root = L.front();
-
-
     searchword(root);
-    int words = 0;
-    long int count_bit = 0;
-    ofstream res("C:\\Users\\tiber\\CLionProjects\\untitled\\result.bin",ofstream::binary);
 
-//    for ( ii = m.begin(); ii !=m.end() ; ++ii) {
-//        words++;
-//    }
-    words = m.size();
-    res << words;//размерность таблицы
-    res<<" ";
-    for(auto a:m){
-        count_bit+=(a.second) * (table[a.first].size());
-    }
-    int last_bits = count_bit%8;
-    cout<<last_bits<<endl;
-    cout<<count_bit<<endl;
-    res<<last_bits;
-    for (ii = m.begin(); ii !=m.end() ; ++ii) {//выводим таблицу
-        res<<(ii->first);
-        res<<(ii->second);
-    }
-
-//    res.open("C:\\Users\\tiber\\CLionProjects\\untitled\\result.bin",ofstream::binary);
-//    if (!(res.is_open())) // если файл не открыт
-//        cout << "file <<res.txt>> can't open\n"; // сообщить об этом
-
-    ifstream fale;
-    fale.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
-
-
-//    if (!(fale.is_open())) // если файл не открыт
-//        cout << "file can't open\n"; // сообщить об этом
-//    else {
-//        int count_bit = 0;
-//        while (!fale.eof()) {
-//            vector<bool>::iterator iiVV;
-//            char wort = fale.get();
-//            for (iiVV = table[wort].begin(); iiVV != table[wort].end(); ++iiVV) {
-//                count_bit++;
-//            }
-//        }
-//        res << (count_bit);
-//        fale.close();
-//    }
-
-
-
-    ifstream falen;
-    falen.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
-
-    if (!(falen.is_open())) // если файл не открыт
+    char binc=0;
+    int count = 0;
+    ofstream dec("C:\\Users\\tiber\\CLionProjects\\untitled\\decod.txt");
+    if (!(dec.is_open())) { // если файл не открыт
         cout << "file can't open\n"; // сообщить об этом
+    }
     else{
-        char binc=0;
-        int count = 0;
-        char word;
-        while(!falen.eof()) {   //объяснение ниже
-            word = falen.get();
-            vector< bool> :: iterator iiV;
-            for ( iiV = table[word].begin(); iiV !=table[word].end() ; ++iiV) {
-                binc |= (*iiV)<<(7- count);
-                count++;
-                if((count == 8)){
-                    count = 0;
-                    res<<binc;
-                    binc = 0;
+//        int i =((int)log10(k)+1) ;
+//        cout<<k<<endl;
+//        cout<<i<<endl;
+//        cout<<(k*2)+2+i<<endl;
+//        binar.seekg((k*2)+2+i);
+        Uzel* head = root;
+        count = 0;
+        binc = res.get();
+        while(1) {
+            bool byte = binc & (1 << (7 - count));
+            if (byte){
+                head=head->right;
+            }
+            else{
+                head = head->left;
+            }
+            if(head->right== NULL && head->left== NULL){
+                dec<<head->ch;
+                head = root;
+            }
+            count++;
+            if(count == 8){
+                count = 0;
+                binc=res.get();
+                if(res.peek()==EOF){
+                    while(last_bit!=count){
+                        byte = binc & (1 << (7 - count));
+                        if (byte){
+                            head=head->right;
+                        }
+                        else{
+                            head = head->left;
+                        }
+                        if(head->right== NULL && head->left== NULL){
+                            dec<<head->ch;
+                            head = root;
+                        }
+                        count++;
+                    }
+                    break;
                 }
             }
         }
-        if(count){
-            res<<binc;
-        }
     }
-    fale.close();
+    dec.close(); //Закрываем файл
     res.close();
-
-
-    return 0;
 }
