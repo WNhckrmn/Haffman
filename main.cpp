@@ -71,26 +71,6 @@ int main()
     fail.close();
 
 
-    //string s="it's my prograndma";
-//    map < char, int > m;
-//    map < char, int> :: iterator ii;
-//    for (int i = 0; i < s.length(); ++i) {
-//        for (int j = i; j >=0 ; --j) {
-//            if (s[i]==s[j])
-//            {
-//                continue;
-//            }
-//        }
-//        char c=s[i];
-//        m[c]=0;
-//        for (int j = 0; j < s.length(); ++j) {
-//            if (s[i]==s[j]){
-//                m[c]++;
-//            }
-//        }
-//    }
-
-
     map < char, int> :: iterator ii;
 
 
@@ -145,9 +125,6 @@ int main()
         res<<(ii->second);
     }
 
-//    res.open("C:\\Users\\tiber\\CLionProjects\\untitled\\result.bin",ofstream::binary);
-//    if (!(res.is_open())) // если файл не открыт
-//        cout << "file <<res.txt>> can't open\n"; // сообщить об этом
 
     ifstream fale;
     fale.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
