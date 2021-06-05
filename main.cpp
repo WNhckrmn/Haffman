@@ -57,19 +57,38 @@ void searchword(Uzel* tree)
 int main()
 {
     map < char, int > m;
-    int cc;
+    char cc;
     string s;
     ifstream fail;
     fail.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
     if (!(fail.is_open())) // если файл не открыт
         cout << "file can't open\n"; // сообщить об этом
     else{
-        while((cc = fail.get()) != EOF) {  
-            m[char(cc)]++;
+        while((cc = fail.get()) != EOF) {   //объяснение ниже
+            m[cc]++;
         }
     }
     fail.close();
 
+
+    //string s="it's my prograndma";
+//    map < char, int > m;
+//    map < char, int> :: iterator ii;
+//    for (int i = 0; i < s.length(); ++i) {
+//        for (int j = i; j >=0 ; --j) {
+//            if (s[i]==s[j])
+//            {
+//                continue;
+//            }
+//        }
+//        char c=s[i];
+//        m[c]=0;
+//        for (int j = 0; j < s.length(); ++j) {
+//            if (s[i]==s[j]){
+//                m[c]++;
+//            }
+//        }
+//    }
 
 
     map < char, int> :: iterator ii;
@@ -105,13 +124,23 @@ int main()
 
     searchword(root);
     int words = 0;
+    long int count_bit = 0;
     ofstream res("C:\\Users\\tiber\\CLionProjects\\untitled\\result.bin",ofstream::binary);
-    int word;
-    for ( ii = m.begin(); ii !=m.end() ; ++ii) {
-        words++;
+
+//    for ( ii = m.begin(); ii !=m.end() ; ++ii) {
+//        words++;
+//    }
+    words = m.size();
+    res << words;//размерность таблицы
+    res<<" ";
+    for(auto a:m){
+        count_bit+=(a.second) * (table[a.first].size());
     }
-    res<<words;
-    for (ii = m.begin(); ii !=m.end() ; ++ii) {
+    int last_bits = count_bit%8;
+    cout<<last_bits<<endl;
+    cout<<count_bit<<endl;
+    res<<last_bits;
+    for (ii = m.begin(); ii !=m.end() ; ++ii) {//выводим таблицу
         res<<(ii->first);
         res<<(ii->second);
     }
@@ -124,20 +153,23 @@ int main()
     fale.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
 
 
-    if (!(fale.is_open())) // если файл не открыт
-        cout << "file can't open\n"; // сообщить об этом
-    else {
-        int count_bit = 0;
-        while (!fale.eof()) {
-            vector<bool>::iterator iiVV;
-            int wort = fale.get();
-            for (iiVV = table[char(wort)].begin(); iiVV != table[char(wort)].end(); ++iiVV) {
-                count_bit++;
-            }
-        }
-        res << (count_bit);
-        fale.close();
-    }
+//    if (!(fale.is_open())) // если файл не открыт
+//        cout << "file can't open\n"; // сообщить об этом
+//    else {
+//        int count_bit = 0;
+//        while (!fale.eof()) {
+//            vector<bool>::iterator iiVV;
+//            char wort = fale.get();
+//            for (iiVV = table[wort].begin(); iiVV != table[wort].end(); ++iiVV) {
+//                count_bit++;
+//            }
+//        }
+//        res << (count_bit);
+//        fale.close();
+//    }
+
+
+
     ifstream falen;
     falen.open("C:\\Users\\tiber\\CLionProjects\\untitled\\text.txt");
 
@@ -146,10 +178,11 @@ int main()
     else{
         char binc=0;
         int count = 0;
-        while(!falen.eof()) {  
+        char word;
+        while(!falen.eof()) {   //объяснение ниже
             word = falen.get();
             vector< bool> :: iterator iiV;
-            for ( iiV = table[char(word)].begin(); iiV !=table[char(word)].end() ; ++iiV) {
+            for ( iiV = table[word].begin(); iiV !=table[word].end() ; ++iiV) {
                 binc |= (*iiV)<<(7- count);
                 count++;
                 if((count == 8)){
@@ -159,8 +192,9 @@ int main()
                 }
             }
         }
-        res<<binc;
-        res<<count;
+        if(count){
+            res<<binc;
+        }
     }
     fale.close();
     res.close();
